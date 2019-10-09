@@ -58,7 +58,7 @@ typings/
 .env
 
 coverage
-build
+# build
 node_modules
 stats.json
 
