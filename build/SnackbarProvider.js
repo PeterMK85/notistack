@@ -14,6 +14,8 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactDom = require('react-dom');
+
 var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
@@ -323,7 +325,7 @@ var SnackbarProvider = function (_Component) {
                 _SnackbarContext2.default.Provider,
                 { value: contextValue },
                 children,
-                domNode ? (0, _react.createPortal)(notistackElements, domNode) : notistackElements
+                domNode ? (0, _reactDom.createPortal)(notistackElements, domNode) : notistackElements
             );
         }
     }]);
