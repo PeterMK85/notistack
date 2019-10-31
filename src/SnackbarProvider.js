@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createPortal } from 'react';
 import PropTypes from 'prop-types';
 import Slide from '@material-ui/core/Slide';
 import SnackbarContext from './SnackbarContext';
@@ -181,7 +181,7 @@ class SnackbarProvider extends Component {
     };
 
     render() {
-        const { classes, children, maxSnack, dense, ...props } = this.props;
+        const { classes, children, maxSnack, dense, domNode, ...props } = this.props;
         const { contextValue } = this.state;
 
         const categ = this.state.snacks.reduce((acc, current) => {
@@ -194,31 +194,32 @@ class SnackbarProvider extends Component {
         }, {});
 
         const iconVariant = Object.assign({ ...defaultIconVariant }, { ...this.props.iconVariant });
+        const notistackElements = Object.entries(categ).map(([origin, snacks]) => (
+            <SnackbarContainer
+                key={origin}
+                dense={dense}
+                anchorOrigin={snacks[0].anchorOrigin}
+                className={classes[`containerAnchorOrigin${origin}`]}
+            >
+                {snacks.map(snack => (
+                    <SnackbarItem
+                        {...props}
+                        key={snack.key}
+                        dense={dense}
+                        snack={snack}
+                        iconVariant={iconVariant}
+                        classes={getClasses(classes)}
+                        onClose={this.handleCloseSnack}
+                        onExited={this.handleExitedSnack}
+                    />
+                ))}
+            </SnackbarContainer>
+        ));
 
         return (
             <SnackbarContext.Provider value={contextValue}>
                 {children}
-                {Object.entries(categ).map(([origin, snacks]) => (
-                    <SnackbarContainer
-                        key={origin}
-                        dense={dense}
-                        anchorOrigin={snacks[0].anchorOrigin}
-                        className={classes[`containerAnchorOrigin${origin}`]}
-                    >
-                        {snacks.map(snack => (
-                            <SnackbarItem
-                                {...props}
-                                key={snack.key}
-                                dense={dense}
-                                snack={snack}
-                                iconVariant={iconVariant}
-                                classes={getClasses(classes)}
-                                onClose={this.handleCloseSnack}
-                                onExited={this.handleExitedSnack}
-                            />
-                        ))}
-                    </SnackbarContainer>
-                ))}
+                {domNode ? createPortal(notistackElements, domNode) : notistackElements}
             </SnackbarContext.Provider>
         );
     }
@@ -348,6 +349,10 @@ SnackbarProvider.propTypes = {
         PropTypes.number,
         PropTypes.shape({ enter: PropTypes.number, exit: PropTypes.number }),
     ]),
+    /**
+     * Valid and exist HTML Node element, used to target `React.createPortal`
+     */
+    domNode: PropTypes.instanceOf(Element),
 };
 
 SnackbarProvider.defaultProps = {
