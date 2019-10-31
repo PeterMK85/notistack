@@ -182,7 +182,7 @@ class SnackbarProvider extends Component {
     };
 
     render() {
-        const { classes, children, maxSnack, dense, domNode, ...props } = this.props;
+        const { classes, children, maxSnack, dense, container, ...props } = this.props;
         const { contextValue } = this.state;
 
         const categ = this.state.snacks.reduce((acc, current) => {
@@ -220,7 +220,7 @@ class SnackbarProvider extends Component {
         return (
             <SnackbarContext.Provider value={contextValue}>
                 {children}
-                {domNode ? createPortal(notistackElements, domNode) : notistackElements}
+                {container ? createPortal(notistackElements, container) : notistackElements}
             </SnackbarContext.Provider>
         );
     }
@@ -353,7 +353,7 @@ SnackbarProvider.propTypes = {
     /**
      * Valid and exist HTML Node element, used to target `React.createPortal`
      */
-    domNode: PropTypes.instanceOf(Element),
+    container: PropTypes.instanceOf(Element),
 };
 
 SnackbarProvider.defaultProps = {

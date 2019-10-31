@@ -281,8 +281,8 @@ var SnackbarProvider = function (_Component) {
                 children = _props.children,
                 maxSnack = _props.maxSnack,
                 dense = _props.dense,
-                domNode = _props.domNode,
-                props = _objectWithoutProperties(_props, ['classes', 'children', 'maxSnack', 'dense', 'domNode']);
+                container = _props.container,
+                props = _objectWithoutProperties(_props, ['classes', 'children', 'maxSnack', 'dense', 'container']);
 
             var contextValue = this.state.contextValue;
 
@@ -325,7 +325,7 @@ var SnackbarProvider = function (_Component) {
                 _SnackbarContext2.default.Provider,
                 { value: contextValue },
                 children,
-                domNode ? (0, _reactDom.createPortal)(notistackElements, domNode) : notistackElements
+                container ? (0, _reactDom.createPortal)(notistackElements, container) : notistackElements
             );
         }
     }]);
@@ -457,7 +457,7 @@ SnackbarProvider.propTypes = {
     /**
      * Valid and exist HTML Node element, used to target `React.createPortal`
      */
-    domNode: _propTypes2.default.instanceOf(Element)
+    container: _propTypes2.default.instanceOf(Element)
 };
 
 SnackbarProvider.defaultProps = {
